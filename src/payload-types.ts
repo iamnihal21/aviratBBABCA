@@ -87,8 +87,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    about: About;
+  };
+  globalsSelect: {
+    about: AboutSelect<false> | AboutSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -312,6 +316,126 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about".
+ */
+export interface About {
+  id: number;
+  hero?: {
+    year?: string | null;
+    description?: string | null;
+  };
+  visionMission?: {
+    vision?: {
+      description?: string | null;
+      points?:
+        | {
+            point?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    mission?: {
+      description?: string | null;
+      points?:
+        | {
+            point?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+  };
+  trustees?:
+    | {
+        name: string;
+        title?: string | null;
+        message?: string | null;
+        qualification?: string | null;
+        experience?: string | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  faculty?: {
+    description?: string | null;
+    additional?: string | null;
+    stats?:
+      | {
+          value?: string | null;
+          label?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "about_select".
+ */
+export interface AboutSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        year?: T;
+        description?: T;
+      };
+  visionMission?:
+    | T
+    | {
+        vision?:
+          | T
+          | {
+              description?: T;
+              points?:
+                | T
+                | {
+                    point?: T;
+                    id?: T;
+                  };
+            };
+        mission?:
+          | T
+          | {
+              description?: T;
+              points?:
+                | T
+                | {
+                    point?: T;
+                    id?: T;
+                  };
+            };
+      };
+  trustees?:
+    | T
+    | {
+        name?: T;
+        title?: T;
+        message?: T;
+        qualification?: T;
+        experience?: T;
+        image?: T;
+        id?: T;
+      };
+  faculty?:
+    | T
+    | {
+        description?: T;
+        additional?: T;
+        stats?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,205 +1,230 @@
-// 'use client'
-
-// import Link from 'next/link'
-// // import dynamic from 'next/dynamic'
-// import { Button } from '@/app/(frontend)/components/ui/button'
-// import { ArrowRight } from 'lucide-react'
-// import { useScrollAnimation } from '@/app/(frontend)/hooks/use-scroll-animation'
-
-// // Dynamically import 3D scene to avoid SSR issues
-// // const Hero3DScene = dynamic(
-// //   () => import('@/app/(frontend)/components/hero-3d-scene').then((mod) => mod.Hero3DScene),
-// //   { ssr: false },
-// // )
-
-// export function Hero() {
-//   const { ref: statsRef, isInView: statsInView } = useScrollAnimation()
-
-//   return (
-//     <section className="relative min-h-screen flex items-center justify-center bg-primary text-primary-foreground overflow-hidden">
-//       {/* 3D Background Scene */}
-//       {/* <Hero3DScene /> */}
-
-//       {/* Gradient overlay for better text readability */}
-//       <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/50 to-primary z-[1]" />
-
-//       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
-//         <p
-//           className="text-sm uppercase tracking-widest text-primary-foreground/70 mb-6 animate-fade-up opacity-0"
-//           style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
-//         >
-//           Established 1892
-//         </p>
-
-//         <h1
-//           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance mb-8 animate-fade-up opacity-0"
-//           style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
-//         >
-//           Where Knowledge
-//           <br />
-//           Meets Innovation
-//         </h1>
-
-//         <p
-//           className="max-w-2xl mx-auto text-lg md:text-xl text-primary-foreground/80 leading-relaxed mb-12 animate-fade-up opacity-0"
-//           style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
-//         >
-//           Avirat University is a world-renowned institution dedicated to advancing human
-//           potential through groundbreaking research, transformative education, and a commitment to
-//           excellence.
-//         </p>
-
-//         <div
-//           className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up opacity-0"
-//           style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
-//         >
-//           <Button
-//             size="lg"
-//             variant="secondary"
-//             asChild
-//             className="group transition-all duration-300 hover:scale-105 hover:shadow-lg"
-//           >
-//             <Link href="#programs">
-//               Explore Programs
-//               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-//             </Link>
-//           </Button>
-//           <Button
-//             size="lg"
-//             variant="outline"
-//             asChild
-//             className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 bg-transparent transition-all duration-300 hover:scale-105"
-//           >
-//             <Link href="#admissions">Apply Now</Link>
-//           </Button>
-//         </div>
-
-//         {/* Stats */}
-//         <div
-//           ref={statsRef}
-//           className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-12 border-t border-primary-foreground/20"
-//         >
-//           {[
-//             { value: '15,000+', label: 'Students' },
-//             { value: '1,200+', label: 'Faculty' },
-//             { value: '98%', label: 'Employment Rate' },
-//             { value: '#12', label: 'Global Ranking' },
-//           ].map((stat, index) => (
-//             <div
-//               key={stat.label}
-//               className={`text-center transition-all duration-500 ${statsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-//               style={{ transitionDelay: `${index * 100}ms` }}
-//             >
-//               <div className="text-3xl md:text-4xl font-bold">{stat.value}</div>
-//               <div className="text-sm text-primary-foreground/60 mt-1">{stat.label}</div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </section>
-//   )
-// }
-
 'use client'
 
-import Link from 'next/link'
-import { Button } from '@/app/(frontend)/components/ui/button'
-import { ArrowRight, Sparkles } from 'lucide-react'
-import { useScrollAnimation } from '@/app/(frontend)/hooks/use-scroll-animation'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronDown, Award, Users, Globe } from 'lucide-react'
+// Sample slide data - you can replace this with props later
+const slides = [
+  {
+    id: 1,
+    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070',
+    title: 'Where Knowledge',
+    highlight: 'Meets',
+    subtitle: 'Innovation',
+    description: 'Experience world-class education at Avirat University, where tradition meets tomorrow.',
+    cta: 'Explore Programs',
+    stats: [
+      { icon: Users, value: '15K+', label: 'Students' },
+      { icon: Award, value: '98%', label: 'Employment' },
+      { icon: Globe, value: '30+', label: 'Countries' },
+    ]
+  },
+  {
+    id: 2,
+    image: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?q=80&w=2070',
+    title: 'Shape Your',
+    highlight: 'Future',
+    subtitle: 'Today',
+    description: 'Join a community of innovators, leaders, and change-makers shaping tomorrow.',
+    cta: 'Apply Now',
+    stats: [
+      { icon: Users, value: '1.2K+', label: 'Faculty' },
+      { icon: Award, value: '#12', label: 'Global Rank' },
+      { icon: Globe, value: '50+', label: 'Programs' },
+    ]
+  },
+  {
+    id: 3,
+    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?q=80&w=2070',
+    title: 'Research That',
+    highlight: 'Matters',
+    subtitle: 'Globally',
+    description: 'Pioneering discoveries and innovations that address global challenges.',
+    cta: 'Discover Research',
+    stats: [
+      { icon: Users, value: '500+', label: 'Researchers' },
+      { icon: Award, value: '$45M', label: 'Funding' },
+      { icon: Globe, value: '200+', label: 'Partners' },
+    ]
+  }
+]
+
 
 export function Hero() {
-  const { ref: statsRef, isInView: statsInView } = useScrollAnimation()
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [direction, setDirection] = useState(0)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    setIsVisible(true)
+    const timer = setInterval(() => {
+      setDirection(1)
+      setActiveSlide((prev) => (prev + 1) % slides.length)
+    }, 6000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const handleSlideChange = (index: number) => {
+    setDirection(index > activeSlide ? 1 : -1)
+    setActiveSlide(index)
+  }
+
+  const slideVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? '100%' : '-100%',
+      opacity: 0,
+      scale: 1.1,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeInOut",
+      },
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? '-100%' : '100%',
+      opacity: 0,
+      scale: 0.9,
+      transition: {
+        duration: 0.8,  
+        ease: "easeInOut",
+      },
+    }),
+  }
+
+  const contentVariants = {
+    initial: { opacity: 0, y: 30 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.6,
+        delay: 0.3,
+      },
+    },
+    exit: { 
+      opacity: 0, 
+      y: -30,
+      transition: {
+        duration: 0.4,
+      },
+    },
+  }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-background animate-gradient" />
+    <>
+    <section className="relative h-screen w-full overflow-hidden bg-black">
+      {/* Background Slides */}
+      <AnimatePresence initial={false} custom={direction} mode="wait">
+        <motion.div
+          key={activeSlide}
+          custom={direction}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute inset-0"
+        >
+          {/* Background Image with Overlay */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${slides[activeSlide].image})` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/80" />
+          </div>
+
+          {/* Animated overlay pattern */}
+          <div className="absolute inset-0 opacity-20">
+            <div className="absolute inset-0" style={{
+              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+              backgroundSize: '40px 40px',
+            }} />
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
       
-      {/* Geometric patterns */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }} />
-      </div>
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent z-[1]" />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
-        <div
-          className="inline-flex items-center gap-2 bg-secondary/80 backdrop-blur-sm px-4 py-2 rounded-full mb-8 animate-fade-up opacity-0"
-          style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
-        >
-          <Sparkles className="w-4 h-4 text-primary" />
-          <span className="text-sm font-medium">Established 1892 · Shaping Futures Since</span>
-        </div>
-
-        <h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-balance mb-6 animate-fade-up opacity-0"
-          style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}
-        >
-          Where Knowledge{' '}
-          <span className="text-gradient-primary">Meets</span>
-          <br />
-          Innovation
-        </h1>
-
-        <p
-          className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground leading-relaxed mb-10 animate-fade-up opacity-0"
-          style={{ animationDelay: '0.4s', animationFillMode: 'forwards' }}
-        >
-          Avirat University is a world-renowned institution dedicated to advancing human
-          potential through groundbreaking research, transformative education, and a commitment to
-          excellence.
-        </p>
-
-        <div
-          className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-up opacity-0"
-          style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}
-        >
-          <Button
-            size="lg"
-            className="group relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/25"
-          >
-            <span className="relative z-10 flex items-center">
-              Explore Programs
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent opacity-100" />
-          </Button>
-          
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-2 border-primary/20 hover:border-primary/40 bg-background/50 backdrop-blur-sm text-foreground transition-all duration-300 hover:scale-105 hover:bg-primary/5"
-          >
-            Apply Now
-          </Button>
-        </div>
-
-        {/* Stats */}
-        <div
-          ref={statsRef}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-12 border-t border-border"
-        >
-          {[
-            { value: '15,000+', label: 'Students' },
-            { value: '1,200+', label: 'Faculty' },
-            { value: '98%', label: 'Employment Rate' },
-            { value: '#12', label: 'Global Ranking' },
-          ].map((stat, index) => (
-            <div
-              key={stat.label}
-              className={`text-center transition-all duration-700 ${statsInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              style={{ transitionDelay: `${index * 150}ms` }}
+      {/* Content */}
+      <div className="relative h-full flex items-center justify-center z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={activeSlide}
+              variants={contentVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              className="text-center text-white"
             >
-              <div className="text-3xl md:text-4xl font-bold bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent">
-                {stat.value}
-              </div>
-              <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-            </div>
-          ))}
+              {/* Main Heading */}
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-4">
+                <span className="block">{slides[activeSlide].title}</span>
+                <span className="block mt-2">
+                  <span className="bg-primary/20 px-4 py-2 inline-block rounded-lg text-primary">
+                    {slides[activeSlide].highlight}
+                  </span>
+                  <span className="ml-4">{slides[activeSlide].subtitle}</span>
+                </span>
+              </h1>
+
+              {/* Description */}
+              <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
+                {slides[activeSlide].description}
+              </p>
+
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <ChevronDown className="w-8 h-8 text-white/60" />
+      </motion.div>
+
+      {/* Slide Indicators */}
+      <div className="absolute bottom-8 left-8 z-20 flex gap-3">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => handleSlideChange(index)}
+            className="group relative"
+            aria-label={`Go to slide ${index + 1}`}
+          >
+            <div
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                index === activeSlide
+                  ? 'bg-primary w-8'
+                  : 'bg-white/50 group-hover:bg-white/80'
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+
+      {/* Progress Bar */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 h-1 bg-primary/30 z-20"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{
+          duration: 6,
+          ease: "linear",
+          repeat: Infinity,
+        }}
+        style={{ originX: 0 }}
+      />
     </section>
+
+
+      </>
   )
 }
