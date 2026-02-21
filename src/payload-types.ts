@@ -69,6 +69,14 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'college-achievements': CollegeAchievement;
+    'student-achievements': StudentAchievement;
+    gallery: Gallery;
+    events: Event;
+    recruiters: Recruiter;
+    'research-areas': ResearchArea;
+    faculty: Faculty;
+    publications: Publication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +86,14 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'college-achievements': CollegeAchievementsSelect<false> | CollegeAchievementsSelect<true>;
+    'student-achievements': StudentAchievementsSelect<false> | StudentAchievementsSelect<true>;
+    gallery: GallerySelect<false> | GallerySelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    recruiters: RecruitersSelect<false> | RecruitersSelect<true>;
+    'research-areas': ResearchAreasSelect<false> | ResearchAreasSelect<true>;
+    faculty: FacultySelect<false> | FacultySelect<true>;
+    publications: PublicationsSelect<false> | PublicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -89,14 +105,22 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     about: About;
+    contact: Contact;
+    admissions: Admission;
+    'campus-settings': CampusSetting;
+    'placements-settings': PlacementsSetting;
+    'home-settings': HomeSetting;
   };
   globalsSelect: {
     about: AboutSelect<false> | AboutSelect<true>;
+    contact: ContactSelect<false> | ContactSelect<true>;
+    admissions: AdmissionsSelect<false> | AdmissionsSelect<true>;
+    'campus-settings': CampusSettingsSelect<false> | CampusSettingsSelect<true>;
+    'placements-settings': PlacementsSettingsSelect<false> | PlacementsSettingsSelect<true>;
+    'home-settings': HomeSettingsSelect<false> | HomeSettingsSelect<true>;
   };
   locale: null;
-  user: User & {
-    collection: 'users';
-  };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -143,6 +167,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -150,7 +175,7 @@ export interface User {
  */
 export interface Media {
   id: number;
-  alt: string;
+  alt?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -162,6 +187,150 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "college-achievements".
+ */
+export interface CollegeAchievement {
+  id: number;
+  title: string;
+  description: string;
+  category: string;
+  date: string;
+  color?:
+    | (
+        | 'from-purple-500 to-pink-500'
+        | 'from-blue-500 to-cyan-500'
+        | 'from-yellow-500 to-orange-500'
+        | 'from-green-500 to-emerald-500'
+        | 'from-red-500 to-rose-500'
+      )
+    | null;
+  iconType?: ('trophy' | 'award' | 'ranking' | 'target' | 'microscope') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "student-achievements".
+ */
+export interface StudentAchievement {
+  id: number;
+  title: string;
+  description: string;
+  studentName: string;
+  category?: ('Technical' | 'Cultural' | 'Sports' | 'Research') | null;
+  date?: string | null;
+  prize?: string | null;
+  color?: string | null;
+  iconType?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery".
+ */
+export interface Gallery {
+  id: number;
+  title: string;
+  description?: string | null;
+  date?: string | null;
+  category: 'infrastructure' | 'events' | 'achievements';
+  image: number | Media;
+  alt: string;
+  span?: ('md:col-span-1' | 'md:col-span-2' | 'md:col-span-2 md:row-span-2') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: number;
+  title: string;
+  description: string;
+  category: 'Academic' | 'Cultural' | 'Sports';
+  date: string;
+  time: string;
+  location: string;
+  capacity?: string | null;
+  registrationDeadline?: string | null;
+  iconType?: ('laptop' | 'music' | 'microscope' | 'trophy' | 'palette') | null;
+  color?:
+    | (
+        | 'from-blue-500 to-cyan-500'
+        | 'from-purple-500 to-pink-500'
+        | 'from-green-500 to-emerald-500'
+        | 'from-orange-500 to-red-500'
+        | 'from-pink-500 to-rose-500'
+      )
+    | null;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "recruiters".
+ */
+export interface Recruiter {
+  id: number;
+  name: string;
+  industry?: string | null;
+  logo?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-areas".
+ */
+export interface ResearchArea {
+  id: number;
+  title: string;
+  description: string;
+  iconType?: ('cpu' | 'heart' | 'leaf' | 'rocket' | 'zap' | 'globe') | null;
+  colorTheme?:
+    | (
+        | 'from-blue-500 to-cyan-500'
+        | 'from-red-500 to-rose-500'
+        | 'from-green-500 to-emerald-500'
+        | 'from-purple-500 to-indigo-500'
+        | 'from-amber-500 to-orange-500'
+      )
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculty".
+ */
+export interface Faculty {
+  id: number;
+  name: string;
+  title: string;
+  specialty?: string | null;
+  image: number | Media;
+  researchArea?: (number | null) | ResearchArea;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications".
+ */
+export interface Publication {
+  id: number;
+  title: string;
+  journal: string;
+  publishDate?: string | null;
+  link?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -194,6 +363,38 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'college-achievements';
+        value: number | CollegeAchievement;
+      } | null)
+    | ({
+        relationTo: 'student-achievements';
+        value: number | StudentAchievement;
+      } | null)
+    | ({
+        relationTo: 'gallery';
+        value: number | Gallery;
+      } | null)
+    | ({
+        relationTo: 'events';
+        value: number | Event;
+      } | null)
+    | ({
+        relationTo: 'recruiters';
+        value: number | Recruiter;
+      } | null)
+    | ({
+        relationTo: 'research-areas';
+        value: number | ResearchArea;
+      } | null)
+    | ({
+        relationTo: 'faculty';
+        value: number | Faculty;
+      } | null)
+    | ({
+        relationTo: 'publications';
+        value: number | Publication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -276,6 +477,118 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "college-achievements_select".
+ */
+export interface CollegeAchievementsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  category?: T;
+  date?: T;
+  color?: T;
+  iconType?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "student-achievements_select".
+ */
+export interface StudentAchievementsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  studentName?: T;
+  category?: T;
+  date?: T;
+  prize?: T;
+  color?: T;
+  iconType?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery_select".
+ */
+export interface GallerySelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  date?: T;
+  category?: T;
+  image?: T;
+  alt?: T;
+  span?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  category?: T;
+  date?: T;
+  time?: T;
+  location?: T;
+  capacity?: T;
+  registrationDeadline?: T;
+  iconType?: T;
+  color?: T;
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "recruiters_select".
+ */
+export interface RecruitersSelect<T extends boolean = true> {
+  name?: T;
+  industry?: T;
+  logo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-areas_select".
+ */
+export interface ResearchAreasSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  iconType?: T;
+  colorTheme?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculty_select".
+ */
+export interface FacultySelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  specialty?: T;
+  image?: T;
+  researchArea?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "publications_select".
+ */
+export interface PublicationsSelect<T extends boolean = true> {
+  title?: T;
+  journal?: T;
+  publishDate?: T;
+  link?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -374,6 +687,196 @@ export interface About {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact".
+ */
+export interface Contact {
+  id: number;
+  contactInfo?:
+    | {
+        title: string;
+        details?:
+          | {
+              line?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        action?: string | null;
+        link?: string | null;
+        color?:
+          | (
+              | 'from-blue-500 to-cyan-500'
+              | 'from-green-500 to-emerald-500'
+              | 'from-purple-500 to-pink-500'
+              | 'from-orange-500 to-red-500'
+            )
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admissions".
+ */
+export interface Admission {
+  id: number;
+  highlights?:
+    | {
+        label: string;
+        value: string;
+        iconType?: ('graduation' | 'users' | 'trophy' | 'clock') | null;
+        id?: string | null;
+      }[]
+    | null;
+  timeline?:
+    | {
+        step?: string | null;
+        title?: string | null;
+        description?: string | null;
+        color?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  deadlines?: {
+    undergraduate?:
+      | {
+          type?: string | null;
+          deadline?: string | null;
+          notification?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    graduate?:
+      | {
+          type?: string | null;
+          deadline?: string | null;
+          notification?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campus-settings".
+ */
+export interface CampusSetting {
+  id: number;
+  stats?:
+    | {
+        count?: string | null;
+        label?: string | null;
+        iconType?: ('users' | 'dumbbell' | 'heart' | 'palette') | null;
+        id?: string | null;
+      }[]
+    | null;
+  facilities?:
+    | {
+        category?: string | null;
+        items?:
+          | {
+              name?: string | null;
+              description?: string | null;
+              iconType?:
+                | ('library' | 'building' | 'home' | 'utensils' | 'coffee' | 'dumbbell' | 'music' | 'palette')
+                | null;
+              features?:
+                | {
+                    feature?: string | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  amenities?:
+    | {
+        label?: string | null;
+        description?: string | null;
+        iconType?: ('wifi' | 'shield' | 'wind' | 'calendar' | 'clock' | 'star') | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "placements-settings".
+ */
+export interface PlacementsSetting {
+  id: number;
+  stats?:
+    | {
+        value: string;
+        label: string;
+        iconType?: ('trending' | 'dollar' | 'award' | 'building') | null;
+        id?: string | null;
+      }[]
+    | null;
+  highlights?:
+    | {
+        title: string;
+        count: string;
+        description: string;
+        iconType?: ('award' | 'briefcase' | 'map-pin') | null;
+        colorTheme?:
+          | ('from-yellow-500 to-orange-500' | 'from-blue-500 to-cyan-500' | 'from-green-500 to-emerald-500')
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-settings".
+ */
+export interface HomeSetting {
+  id: number;
+  slides?:
+    | {
+        title: string;
+        highlight: string;
+        subtitle: string;
+        description: string;
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  sanskritQuote?: string | null;
+  quoteTranslation?: string | null;
+  stats?:
+    | {
+        value: string;
+        label: string;
+        description?: string | null;
+        color?: ('from-blue-500 to-cyan-500' | 'from-green-500 to-emerald-500' | 'from-purple-500 to-pink-500') | null;
+        id?: string | null;
+      }[]
+    | null;
+  mapUrl?: string | null;
+  address?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "about_select".
  */
 export interface AboutSelect<T extends boolean = true> {
@@ -433,6 +936,187 @@ export interface AboutSelect<T extends boolean = true> {
               id?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact_select".
+ */
+export interface ContactSelect<T extends boolean = true> {
+  contactInfo?:
+    | T
+    | {
+        title?: T;
+        details?:
+          | T
+          | {
+              line?: T;
+              id?: T;
+            };
+        action?: T;
+        link?: T;
+        color?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "admissions_select".
+ */
+export interface AdmissionsSelect<T extends boolean = true> {
+  highlights?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        iconType?: T;
+        id?: T;
+      };
+  timeline?:
+    | T
+    | {
+        step?: T;
+        title?: T;
+        description?: T;
+        color?: T;
+        id?: T;
+      };
+  deadlines?:
+    | T
+    | {
+        undergraduate?:
+          | T
+          | {
+              type?: T;
+              deadline?: T;
+              notification?: T;
+              id?: T;
+            };
+        graduate?:
+          | T
+          | {
+              type?: T;
+              deadline?: T;
+              notification?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "campus-settings_select".
+ */
+export interface CampusSettingsSelect<T extends boolean = true> {
+  stats?:
+    | T
+    | {
+        count?: T;
+        label?: T;
+        iconType?: T;
+        id?: T;
+      };
+  facilities?:
+    | T
+    | {
+        category?: T;
+        items?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              iconType?: T;
+              features?:
+                | T
+                | {
+                    feature?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  amenities?:
+    | T
+    | {
+        label?: T;
+        description?: T;
+        iconType?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "placements-settings_select".
+ */
+export interface PlacementsSettingsSelect<T extends boolean = true> {
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        iconType?: T;
+        id?: T;
+      };
+  highlights?:
+    | T
+    | {
+        title?: T;
+        count?: T;
+        description?: T;
+        iconType?: T;
+        colorTheme?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-settings_select".
+ */
+export interface HomeSettingsSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        title?: T;
+        highlight?: T;
+        subtitle?: T;
+        description?: T;
+        image?: T;
+        id?: T;
+      };
+  sanskritQuote?: T;
+  quoteTranslation?: T;
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        description?: T;
+        color?: T;
+        id?: T;
+      };
+  mapUrl?: T;
+  address?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -336,15 +336,18 @@ export default function AboutClient({ data }: { data: any }) {
               className="bg-white p-10 rounded-[3rem] border flex flex-col md:flex-row gap-8 shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Avatar */}
-              <div className="relative w-48 h-48 rounded-3xl overflow-hidden shrink-0 shadow-inner">
-                {trustee?.photo?.url || typeof trustee?.photo === 'string' ? (
+              {/* Avatar */}
+              <div className="relative w-48 h-48 rounded-3xl overflow-hidden shrink-0 shadow-inner bg-gray-100">
+                {trustee?.image ? (
                   <img
-                    src={typeof trustee.image === 'string' ? trustee.image : trustee.image.url}
-                    alt={trustee.name}
+                    src={typeof trustee.image === 'string' ? trustee.image : trustee.image?.url}
+                    alt={trustee.name || 'Trustee'}
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <p className="text-white text-center">No Photo Available</p>
+                  <div className="flex items-center justify-center h-full text-gray-400">
+                    No Photo Available
+                  </div>
                 )}
               </div>
 
@@ -426,6 +429,7 @@ export default function AboutClient({ data }: { data: any }) {
           )}
         </div>
       </section>
+      
     </main>
   )
 }
