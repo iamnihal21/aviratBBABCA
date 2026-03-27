@@ -380,27 +380,13 @@ export interface Payment {
 export interface Student {
   id: number;
   name: string;
+  email: string;
   enrollmentNumber: string;
   phoneNumber: string;
   course: 'bca' | 'bba';
   needsPasswordChange?: boolean | null;
   updatedAt: string;
   createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
   collection: 'students';
 }
 /**
@@ -716,26 +702,13 @@ export interface PaymentsSelect<T extends boolean = true> {
  */
 export interface StudentsSelect<T extends boolean = true> {
   name?: T;
+  email?: T;
   enrollmentNumber?: T;
   phoneNumber?: T;
   course?: T;
   needsPasswordChange?: T;
   updatedAt?: T;
   createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

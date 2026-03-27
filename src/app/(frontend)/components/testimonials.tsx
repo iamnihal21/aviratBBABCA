@@ -5,29 +5,18 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent } from '@/app/(frontend)/components/ui/card'
 import { Quote, Users } from 'lucide-react'
 
-const testimonials = [
-  {
-    name: 'Jessica Park',
-    role: 'Class of 2025, Biomedical Engineering',
-    quote: 'My time at Avirat has been transformative. The opportunities for research, the supportive community, and the lifelong friendships I\'ve made here have shaped who I am today.',
-    image: '/testimonials/jessica.jpg',
-  },
-  {
-    name: 'Marcus Chen',
-    role: 'Class of 2024, Computer Science',
-    quote: 'The campus facilities are world-class. From the innovation labs to the study spaces, everything is designed to help students succeed.',
-    image: '/testimonials/marcus.jpg',
-  },
-  {
-    name: 'Sofia Rodriguez',
-    role: 'Class of 2026, Architecture',
-    quote: 'Living on campus has been incredible. The community events, the beautiful grounds, and the support from staff make this feel like home.',
-    image: '/testimonials/sofia.jpg',
-  },
-]
+interface TestimonialsProps {
+  data?: any[]
+}
 
-export function Testimonials() {
+export function Testimonials({ data }: TestimonialsProps) {
   const [activeTestimonial, setActiveTestimonial] = useState(0)
+  
+  // Use the data from Payload, or an empty array as fallback
+  const testimonials = data || []
+
+  // Guard against empty data
+  if (testimonials.length === 0) return null
 
   return (
     <section className="w-full py-16 bg-secondary/30">
@@ -44,7 +33,7 @@ export function Testimonials() {
             Student <span className="text-primary">Stories</span>
           </h2>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            Hear what our students have to say about life at Avirat
+            Hear what our students have to say about life at our campus
           </p>
         </motion.div>
 
@@ -63,9 +52,9 @@ export function Testimonials() {
                   {/* Quote Icon */}
                   <Quote className="h-8 w-8 text-primary/20 mb-4" />
                   
-                  {/* Quote Text - Reduced font size */}
+                  {/* Quote Text */}
                   <blockquote className="text-base md:text-lg text-foreground/90 leading-relaxed mb-6">
-                    "{testimonials[activeTestimonial].quote}"
+                    {testimonials[activeTestimonial].quote}
                   </blockquote>
                   
                   {/* Author Info */}
@@ -90,20 +79,22 @@ export function Testimonials() {
           </AnimatePresence>
 
           {/* Navigation Dots */}
-          <div className="flex justify-center gap-2 mt-6">
-            {testimonials.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTestimonial(index)}
-                className={`transition-all duration-300 ${
-                  index === activeTestimonial
-                    ? 'w-6 h-2 bg-primary rounded-full'
-                    : 'w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400'
-                }`}
-                aria-label={`View testimonial ${index + 1}`}
-              />
-            ))}
-          </div>
+          {testimonials.length > 1 && (
+            <div className="flex justify-center gap-2 mt-6">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTestimonial(index)}
+                  className={`transition-all duration-300 ${
+                    index === activeTestimonial
+                      ? 'w-6 h-2 bg-primary rounded-full'
+                      : 'w-2 h-2 bg-gray-300 rounded-full hover:bg-gray-400'
+                  }`}
+                  aria-label={`View testimonial ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

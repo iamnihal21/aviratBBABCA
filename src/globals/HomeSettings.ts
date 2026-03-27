@@ -51,6 +51,72 @@ export const HomeSettings: GlobalConfig = {
           ],
         },
         {
+          label: 'Courses (BCA/BBA)',
+          fields: [
+            {
+              name: 'courses',
+              type: 'array',
+              labels: {
+                singular: 'Course Detail',
+                plural: 'Course Details',
+              },
+              fields: [
+                {
+                  name: 'courseKey',
+                  type: 'select',
+                  required: true,
+                  options: [
+                    { label: 'BCA', value: 'bca' },
+                    { label: 'BBA', value: 'bba' },
+                  ],
+                },
+                { name: 'title', type: 'text', required: true },
+                { name: 'shortTitle', type: 'text', required: true },
+                { name: 'description', type: 'textarea', required: true },
+                { name: 'duration', type: 'text', defaultValue: '3 Years (6 Semesters)' },
+                { name: 'totalCredits', type: 'number' },
+                { name: 'eligibility', type: 'text' },
+                {
+                  name: 'careers',
+                  type: 'array',
+                  fields: [{ name: 'role', type: 'text' }],
+                },
+                {
+                  name: 'semesters',
+                  type: 'array',
+                  fields: [
+                    { name: 'semesterName', type: 'text', required: true },
+                    {
+                      name: 'subjects',
+                      type: 'array',
+                      fields: [
+                        { name: 'code', type: 'text' },
+                        { name: 'name', type: 'text', required: true },
+                        { name: 'credits', type: 'number' },
+                        { name: 'type', type: 'text' },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: 'Testimonials',
+          fields: [
+            {
+              name: 'testimonials',
+              type: 'array',
+              fields: [
+                { name: 'name', type: 'text', required: true },
+                { name: 'role', type: 'text', required: true },
+                { name: 'quote', type: 'textarea', required: true },
+              ],
+            },
+          ],
+        },
+        {
           label: 'Map & Footer',
           fields: [
             { name: 'mapUrl', type: 'text' },

@@ -3,7 +3,12 @@
 import { motion } from 'framer-motion'
 import { useScrollAnimation } from '@/app/(frontend)/hooks/use-scroll-animation'
 
-export function MessageSection() {
+interface MessageSectionProps {
+  sanskritQuote?: string
+  quoteTranslation?: string
+}
+
+export function MessageSection({ sanskritQuote, quoteTranslation }: MessageSectionProps) {
   const { ref, isInView } = useScrollAnimation({ threshold: 0.1, triggerOnce: true })
 
   return (
@@ -15,10 +20,10 @@ export function MessageSection() {
           transition={{ duration: 0.5 }}
         >
           <p className="text-xl md:text-2xl font-serif text-foreground mb-2">
-            विद्या ददाति विनयं विनयाद्याति पात्रताम्
+            {sanskritQuote}
           </p>
           <p className="text-sm md:text-base text-muted-foreground">
-            Knowledge gives humility, from humility one attains worthiness
+            {quoteTranslation}
           </p>
         </motion.div>
       </div>

@@ -12,7 +12,7 @@ const footerLinks = {
   admissions: [
     { name: 'Apply Now', href: '/admissions' },
     { name: 'Visit Campus', href: '/campus' },
-    { name: 'Tuition & Aid', href: '/admissions#deadlines' },
+    { name: 'Tuition & Aid', href: '/admissions' },
     { name: 'International Students', href: '/admissions' },
     { name: 'Transfer Students', href: '/admissions' },
   ],
@@ -20,7 +20,7 @@ const footerLinks = {
     { name: 'Student Life', href: '/campus' },
     { name: 'Housing & Dining', href: '/campus' },
     { name: 'Photo Gallery', href: '/gallery' },
-    { name: 'Virtual Tour', href: '/campus#virtual-tour' },
+    { name: 'Virtual Tour', href: '/campus' },
     { name: 'Campus Map', href: '/contact' },
   ],
   about: [
