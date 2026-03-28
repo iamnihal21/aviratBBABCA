@@ -6,11 +6,12 @@ import { Testimonials } from '@/app/(frontend)/components/testimonials'
 import { ApplyNow } from './components/ApplyNow'
 import { MessageSection } from './components/message'
 import { HomeGallery } from './components/HomeGallery'
-import { MapLocation } from './components/mapSection'
+import { MapSection } from './components/mapSection'
 import { Stats } from './components/stats'
 import { CourseStructure } from './components/subjects'
 import { CourseDialog } from './components/courseSelection'
 import { CourseType } from '@/types/course'
+import { WhyChooseUs } from './components/WhyChoseUs'
 
 export default function Home() {
   const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null)
@@ -75,8 +76,9 @@ export default function Home() {
         </>
       )}
 
+      <WhyChooseUs data={homeData?.whyChooseUs} />
       {/* Pass mapUrl and Sanskrit quote to lower sections */}
-      <MapLocation mapUrl={homeData?.mapUrl} />
+      <MapSection />
       <ApplyNow />
       <MessageSection
         sanskritQuote={homeData?.sanskritQuote}

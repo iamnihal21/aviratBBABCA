@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, type Variants } from 'framer-motion'
 import { Button } from '@/app/(frontend)/components/ui/button'
 import { Card, CardContent } from '@/app/(frontend)/components/ui/card'
 import { Input } from '@/app/(frontend)/components/ui/input'
@@ -14,17 +14,20 @@ import {
   Clock,
   Send,
   CheckCircle2,
-  AlertCircle,
   MessageSquare,
   ChevronRight,
   HelpCircle,
+  Sparkles,
+  Globe,
+  Trophy,
+  ShieldAlert,
 } from 'lucide-react'
 import { useScrollAnimation } from '@/app/(frontend)/hooks/use-scroll-animation'
 
 export default function ContactClient({ data }: { data: any }) {
   const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const { ref: heroRef } = useScrollAnimation({ threshold: 0.1, triggerOnce: true })
 
-  // Icon mapping logic based on Title
   const getIcon = (title: string) => {
     const t = title.toLowerCase()
     if (t.includes('visit')) return MapPin
@@ -38,15 +41,22 @@ export default function ContactClient({ data }: { data: any }) {
     threshold: 0.1,
     triggerOnce: true,
   })
-  const { ref: formRef, isInView: formInView } = useScrollAnimation({
-    threshold: 0.1,
-    triggerOnce: true,
-  })
 
-  const fadeInUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }
+  const fadeInUp: Variants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  }
+
   const staggerChildren = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+    visible: { opacity: 1, transition: { staggerChildren: 0.12 } },
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -56,198 +66,217 @@ export default function ContactClient({ data }: { data: any }) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <main className="min-h-screen bg-white text-gray-950">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent" />
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+      <section className="relative pt-40 pb-24 overflow-hidden bg-gradient-to-b from-background to-secondary/20">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage:
-                'radial-gradient(circle at 2px 2px, hsl(var(--primary)/0.1) 1px, transparent 0)',
-              backgroundSize: '40px 40px',
+              backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)',
+              backgroundSize: '32px 32px',
             }}
           />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center flex flex-col items-center">
           <motion.div
-            ref={headerRef}
-            initial="visible"
+            ref={heroRef}
+            initial="hidden"
             animate="visible"
             variants={staggerChildren}
-            className="max-w-3xl"
+            className="max-w-4xl"
           >
             <motion.div
               variants={fadeInUp}
-              className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-primary/20"
+              className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full mb-8 border border-gray-200 shadow-sm"
             >
-              <MessageSquare className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium">Get in Touch with Avirat</span>
+              <Sparkles className="w-4 h-4 text-primary animate-bounce" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                Always Connected
+              </span>
             </motion.div>
             <motion.h1
               variants={fadeInUp}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6"
+              className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.85]"
             >
-              We're Here to{' '}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Help
-              </span>
+              We're Here to{' '} <br />
+              <span className="text-primary italic">help</span>
             </motion.h1>
+            
             <motion.p
               variants={fadeInUp}
-              className="text-xl text-muted-foreground leading-relaxed mb-8 max-w-2xl"
+              className="text-xl text-gray-500 leading-relaxed mb-12 max-w-2xl mx-auto font-medium"
             >
-              Have questions about admissions, programs, or campus life? Our team is ready to assist
-              you every step of the way.
+              Whether you’re a prospective student, a parent, or an industry partner, our
+              specialized teams are ready to provide the clarity you need.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* Contact Information Cards */}
-      <section ref={infoRef} className="py-16">
+      {/* Info & Form Split Section */}
+      <section className="py-24 relative -mt-16 z-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            animate={infoInView ? 'visible' : 'hidden'}
-            variants={staggerChildren}
-            className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {data?.contactInfo?.map((info: any, idx: number) => {
-              const Icon = getIcon(info.title)
-              return (
-                <motion.div key={idx} variants={fadeInUp}>
-                  <Card className="group bg-white border-none shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full relative overflow-hidden">
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${info.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-                    />
-                    <CardContent className="p-6 relative z-10">
-                      <div
-                        className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${info.color} p-0.5 mb-4 transform group-hover:scale-110 transition-transform duration-300`}
-                      >
-                        <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center">
-                          <Icon className="h-7 w-7 text-foreground" />
+          <div className="grid lg:grid-cols-12 gap-12 items-start">
+            {/* Left Column: Contact Cards */}
+            <motion.div
+              ref={infoRef}
+              initial="hidden"
+              animate={infoInView ? 'visible' : 'hidden'}
+              variants={staggerChildren}
+              className="lg:col-span-5 space-y-6"
+            >
+              {data?.contactInfo?.map((info: any, idx: number) => {
+                const Icon = getIcon(info.title)
+                return (
+                  <motion.div key={idx} variants={fadeInUp}>
+                    <Card className="group bg-white border-none shadow-2xl rounded-[2.5rem] overflow-hidden hover:scale-[1.02] transition-all duration-500">
+                      <CardContent className="p-8">
+                        <div className="flex gap-6 items-start">
+                          <div
+                            className={`w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-500 shrink-0`}
+                          >
+                            <Icon className="h-7 w-7" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-black tracking-tight mb-2">{info.title}</h3>
+                            <div className="space-y-1 mb-4">
+                              {info.details?.map((d: any, i: number) => (
+                                <p
+                                  key={i}
+                                  className="text-sm font-medium text-gray-500 leading-relaxed"
+                                >
+                                  {d.line}
+                                </p>
+                              ))}
+                            </div>
+                            <Link
+                              href={info.link || '#'}
+                              className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2 group/link"
+                            >
+                              {info.action}{' '}
+                              <ChevronRight className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
+                            </Link>
+                          </div>
                         </div>
-                      </div>
-                      <h3 className="text-lg font-semibold text-foreground mb-3">{info.title}</h3>
-                      <div className="space-y-1 mb-4">
-                        {info.details?.map((d: any, i: number) => (
-                          <p key={i} className="text-sm text-muted-foreground">
-                            {d.line}
-                          </p>
-                        ))}
-                      </div>
-                      <Link
-                        href={info.link || '#'}
-                        className="inline-flex items-center text-sm font-medium text-primary hover:text-accent transition-colors group/link"
-                      >
-                        {info.action}{' '}
-                        <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover/link:translate-x-1" />
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Form Section */}
-      <section ref={formRef} className="py-24 bg-secondary/30">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial="hidden"
-            animate={formInView ? 'visible' : 'hidden'}
-            variants={staggerChildren}
-          >
-            <motion.div variants={fadeInUp} className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-                Send Us a{' '}
-                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Message
-                </span>
-              </h2>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                )
+              })}
             </motion.div>
 
-            <motion.div variants={fadeInUp}>
-              <Card className="bg-white border-none shadow-xl overflow-hidden">
-                <div className="h-2 bg-gradient-to-r from-primary via-accent to-primary" />
-                <CardContent className="p-8 md:p-10">
+            {/* Right Column: High-End Contact Form */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="lg:col-span-7"
+            >
+              <Card className="bg-white border-2 border-gray-100 shadow-2xl rounded-[3rem] overflow-hidden">
+                <div className="p-10 md:p-16">
+                  <div className="mb-10">
+                    <h2 className="text-3xl font-black tracking-tight mb-2">Drop us a line</h2>
+                    <p className="text-gray-500 font-medium italic">
+                      We typically respond within 2 business hours.
+                    </p>
+                  </div>
+
                   <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <Input placeholder="First Name" required className="border-gray-200" />
-                      <Input placeholder="Last Name" required className="border-gray-200" />
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">
+                          First Name
+                        </label>
+                        <Input
+                          required
+                          className="h-14 rounded-2xl bg-gray-50 border-transparent focus:bg-white focus:border-primary transition-all"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">
+                          Last Name
+                        </label>
+                        <Input
+                          required
+                          className="h-14 rounded-2xl bg-gray-50 border-transparent focus:bg-white focus:border-primary transition-all"
+                        />
+                      </div>
                     </div>
-                    <Input
-                      type="email"
-                      placeholder="Email Address"
-                      required
-                      className="border-gray-200"
-                    />
-                    <Input type="tel" placeholder="Phone Number" className="border-gray-200" />
-                    <Textarea
-                      placeholder="How can we help?"
-                      required
-                      className="min-h-[140px] border-gray-200"
-                    />
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">
+                        Email Address
+                      </label>
+                      <Input
+                        type="email"
+                        required
+                        className="h-14 rounded-2xl bg-gray-50 border-transparent focus:bg-white focus:border-primary transition-all"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">
+                        Your Message
+                      </label>
+                      <Textarea
+                        required
+                        className="min-h-[160px] rounded-[2rem] bg-gray-50 border-transparent focus:bg-white focus:border-primary transition-all p-6"
+                      />
+                    </div>
 
                     <Button
                       type="submit"
-                      size="lg"
-                      className="w-full bg-gradient-to-r from-primary to-accent text-white h-14"
+                      className="w-full h-16 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-primary/20"
                       disabled={formStatus === 'success'}
                     >
-                      {formStatus === 'success' ? 'Message Sent!' : 'Send Message'}
+                      {formStatus === 'success' ? (
+                        <span className="flex items-center gap-2">
+                          <CheckCircle2 className="w-5 h-5" /> Message Sent
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          Send Message <Send className="w-4 h-4" />
+                        </span>
+                      )}
                     </Button>
                   </form>
-                </CardContent>
+                </div>
               </Card>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-24">
+      {/* FAQ Section - Clean Journal Style */}
+      <section className="py-32 bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-              Frequently Asked{' '}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Questions
-              </span>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
+              Common Inquiries
             </h2>
-            <p className="text-lg text-muted-foreground">
-              Find quick answers to common questions about contacting us.
-            </p>
-          </motion.div>
-          <div className="space-y-4">
+            <div className="h-1 w-12 bg-primary mx-auto rounded-full" />
+          </div>
+
+          <div className="grid gap-4">
             {data?.faqs?.map((faq: any, index: number) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                <Card className="bg-white border-none shadow-md group">
-                  <CardContent className="p-6">
-                    <div className="flex gap-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                <Card className="bg-white border-gray-100 rounded-[2rem] hover:shadow-xl transition-all duration-500 group">
+                  <CardContent className="p-8">
+                    <div className="flex gap-6 items-start">
+                      <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
                         <HelpCircle className="h-5 w-5 text-primary" />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold mb-2">{faq.question}</h3>
-                        <p className="text-muted-foreground">{faq.answer}</p>
+                        <h3 className="text-lg font-black tracking-tight mb-3">{faq.question}</h3>
+                        <p className="text-gray-500 font-medium leading-relaxed">{faq.answer}</p>
                       </div>
                     </div>
                   </CardContent>
@@ -258,51 +287,42 @@ export default function ContactClient({ data }: { data: any }) {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <Card className="bg-gradient-to-br from-primary/5 via-accent/5 to-transparent border-2 border-primary/20 shadow-xl overflow-hidden relative">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl" />
+      {/* Emergency Section - High Contrast Terminal */}
+      <section className="py-32 bg-gray-950 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
 
-              <CardContent className="p-10 relative z-10">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <AlertCircle className="h-8 w-8 text-primary" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <Card className="bg-white/5 border border-white/10 rounded-[4rem] overflow-hidden backdrop-blur-sm">
+              <CardContent className="p-12 md:p-24 text-center">
+                <div className="w-20 h-20 rounded-3xl bg-red-500/20 flex items-center justify-center mx-auto mb-10 border border-red-500/30">
+                  <ShieldAlert className="h-10 w-10 text-red-500" />
                 </div>
 
-                <h3 className="text-3xl font-bold text-foreground mb-3">24/7 Emergency Contact</h3>
-                <p className="text-muted-foreground mb-8 text-lg">
-                  For urgent matters outside business hours
+                <h3 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4">
+                  Critical Assistance.
+                </h3>
+                <p className="text-gray-400 font-medium text-lg mb-12 max-w-xl mx-auto italic">
+                  Available 24/7 for urgent matters requiring immediate institutional attention.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                   <Button
-                    size="lg"
                     variant="outline"
-                    className="border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 min-w-[200px] group"
+                    className="h-20 px-10 rounded-2xl border-white/10 bg-white/5 text-white font-black uppercase tracking-widest text-xs hover:bg-white hover:text-gray-950 transition-all min-w-[280px]"
                   >
-                    <Phone className="mr-2 h-4 w-4 group-hover:animate-pulse" />
-                    +1 (234) 567-8999
+                    <Phone className="mr-3 h-5 w-5" />
+                    Hotline: +1 (234) 567-8999
                   </Button>
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary text-white border-0 min-w-[200px] group"
-                  >
-                    <Mail className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                  <Button className="h-20 px-10 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-xs hover:scale-105 transition-all min-w-[280px] shadow-2xl shadow-primary/40">
+                    <Mail className="mr-3 h-5 w-5" />
                     emergency@avirat.edu
                   </Button>
                 </div>
-
-                <p className="text-sm text-muted-foreground mt-6">
-                  Available 24 hours a day, 7 days a week for emergencies
-                </p>
               </CardContent>
             </Card>
           </motion.div>

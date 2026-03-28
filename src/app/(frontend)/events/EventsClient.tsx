@@ -14,6 +14,7 @@ export default function EventsClient({ eventsData }: { eventsData: any[] }) {
   const [selectedEvent, setSelectedEvent] = useState<any | null>(null)
   const { ref: headerRef } = useScrollAnimation({ threshold: 0.1, triggerOnce: true })
 
+  const { ref: heroRef } = useScrollAnimation({ threshold: 0.1, triggerOnce: true })
   const getIcon = (type: string) => {
     const icons: any = { laptop: Laptop, music: Music, microscope: Microscope, trophy: Trophy, palette: Palette }
     return icons[type] || Calendar
@@ -28,32 +29,56 @@ export default function EventsClient({ eventsData }: { eventsData: any[] }) {
   const staggerChildren = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <main className="min-h-screen ">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/5 to-transparent" />
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+      <section className="relative pt-40 pb-24 overflow-hidden bg-gradient-to-b from-background to-secondary/20">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-1/2 w-[1000px] h-[600px] bg-primary/5 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: 'radial-gradient(circle at 2px 2px, black 1px, transparent 0)',
+              backgroundSize: '32px 32px',
+            }}
+          />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-          <motion.div ref={headerRef} initial="visible" animate="visible" variants={staggerChildren} className="max-w-3xl">
-            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-primary/20">
-              <Calendar className="w-4 h-4 text-primary" />
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-8 text-center flex flex-col items-center">
+          <motion.div
+            ref={heroRef}
+            initial="hidden"
+            animate="visible"
+            variants={staggerChildren}
+            className="max-w-4xl"
+          >
+            <motion.div
+              variants={fadeInUp}
+              className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full mb-8 border border-gray-200 shadow-sm"
+            >
+              <Calendar className="w-4 h-4 text-primary animate-bounce" />
               <span className="text-sm font-medium">Events at Avirat</span>
             </motion.div>
-            <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-              Upcoming <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Events</span>
+
+            <motion.h1
+              variants={fadeInUp}
+              className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.85]"
+            >
+              Upcoming <br />
+              <span className="text-primary italic">Events.</span>
             </motion.h1>
-            <motion.p variants={fadeInUp} className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-              Join us for academic conferences, cultural festivals, sports meets, and more.
+
+            <motion.p
+              variants={fadeInUp}
+              className="text-xl text-gray-500 leading-relaxed mb-12 max-w-2xl mx-auto font-medium"
+            >
+             Join us for academic conferences, cultural festivals, sports meets, and more.
             </motion.p>
           </motion.div>
         </div>
       </section>
 
       {/* Filter Bar */}
-      <section className="pb-8">
+      <section className="pb-8 mt-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-wrap gap-3 justify-center md:justify-start">
             {categories.map((cat) => (
@@ -113,9 +138,9 @@ export default function EventsClient({ eventsData }: { eventsData: any[] }) {
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <MapPin className="h-4 w-4 text-primary" /> {event.location}
                         </div>
-                        <Button className="w-full mt-4 bg-gradient-to-r from-primary to-accent text-white group/btn">
+                        {/* <Button className="w-full mt-4 bg-gradient-to-r from-primary to-accent text-white group/btn">
                           View Details <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1" />
-                        </Button>
+                        </Button> */}
                       </CardContent>
                     </Card>
                   </motion.div>

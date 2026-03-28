@@ -37,14 +37,14 @@ export const HomeSettings: GlobalConfig = {
                 { name: 'value', type: 'text', required: true },
                 { name: 'label', type: 'text', required: true },
                 { name: 'description', type: 'text' },
-                { 
-                  name: 'color', 
-                  type: 'select', 
+                {
+                  name: 'color',
+                  type: 'select',
                   options: [
                     { label: 'Blue', value: 'from-blue-500 to-cyan-500' },
                     { label: 'Green', value: 'from-green-500 to-emerald-500' },
                     { label: 'Purple', value: 'from-purple-500 to-pink-500' },
-                  ] 
+                  ],
                 },
               ],
             },
@@ -121,6 +121,38 @@ export const HomeSettings: GlobalConfig = {
           fields: [
             { name: 'mapUrl', type: 'text' },
             { name: 'address', type: 'text' },
+          ],
+        },
+        {
+          label: 'Why Choose Us',
+          fields: [
+            {
+              name: 'whyChooseUs',
+              type: 'array',
+              admin: {
+                description:
+                  'Highlight the key benefits of Avirat University (Location, Faculty, etc.)',
+              },
+              fields: [
+                { name: 'title', type: 'text', required: true },
+                { name: 'description', type: 'textarea', required: true },
+                {
+                  name: 'iconType',
+                  type: 'select',
+                  options: [
+                    { label: 'Location', value: 'MapPin' },
+                    { label: 'Peace', value: 'Wind' },
+                    { label: 'Industry', value: 'Briefcase' },
+                    { label: 'Faculty', value: 'Users' },
+                    { label: 'Practical', value: 'Cpu' },
+                    { label: 'Admission', value: 'ShieldCheck' },
+                    { label: 'Growth', value: 'Sparkles' },
+                    { label: 'Infrastructure', value: 'Building' },
+                  ],
+                  defaultValue: 'Sparkles',
+                },
+              ],
+            },
           ],
         },
       ],

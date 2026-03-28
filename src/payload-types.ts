@@ -998,6 +998,20 @@ export interface PlacementsSetting {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Add the companies that frequently recruit from our campus.
+   */
+  recruiters?:
+    | {
+        name: string;
+        industry: string;
+        /**
+         * Optional: Upload the company logo.
+         */
+        logo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1071,6 +1085,17 @@ export interface HomeSetting {
     | null;
   mapUrl?: string | null;
   address?: string | null;
+  /**
+   * Highlight the key benefits of Avirat University (Location, Faculty, etc.)
+   */
+  whyChooseUs?:
+    | {
+        title: string;
+        description: string;
+        iconType?: ('MapPin' | 'Wind' | 'Briefcase' | 'Users' | 'Cpu' | 'ShieldCheck' | 'Sparkles' | 'Building') | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1284,6 +1309,14 @@ export interface PlacementsSettingsSelect<T extends boolean = true> {
         colorTheme?: T;
         id?: T;
       };
+  recruiters?:
+    | T
+    | {
+        name?: T;
+        industry?: T;
+        logo?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1357,6 +1390,14 @@ export interface HomeSettingsSelect<T extends boolean = true> {
       };
   mapUrl?: T;
   address?: T;
+  whyChooseUs?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        iconType?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -1,18 +1,25 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { motion, AnimatePresence, Variants } from 'framer-motion'
 import Image from 'next/image'
 
 interface HeroProps {
-  data?: any[] // From Payload CMS: homeData.slides
+  data?: any[]
 }
 
 export function Hero({ data }: HeroProps) {
   const [activeSlide, setActiveSlide] = useState(0)
   const [direction, setDirection] = useState(0)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const slides = data || []
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e
+    const moveX = (clientX - window.innerWidth / 2) / 50
+    const moveY = (clientY - window.innerHeight / 2) / 50
+    setMousePosition({ x: moveX, y: moveY })
+  }
 
   useEffect(() => {
     if (slides.length <= 1) return
@@ -28,46 +35,57 @@ export function Hero({ data }: HeroProps) {
     setActiveSlide(index)
   }
 
-  // Animation variants from your first UI version
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
+  // ✅ FIXED TYPES
+  const slideVariants: Variants = {
+    enter: () => ({
+      scale: 1.2,
       opacity: 0,
-      scale: 1.1,
+      filter: 'blur(10px)',
     }),
     center: {
-      x: 0,
-      opacity: 1,
       scale: 1,
-      transition: { duration: 0.8, ease: "easeInOut" },
+      opacity: 1,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 1.2,
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number], // ✅ FIX
+      },
     },
-    exit: (direction: number) => ({
-      x: direction > 0 ? '-100%' : '100%',
-      opacity: 0,
+    exit: () => ({
       scale: 0.9,
-      transition: { duration: 0.8, ease: "easeInOut" },
+      opacity: 0,
+      filter: 'blur(10px)',
+      transition: { duration: 0.8 },
     }),
   }
 
-  const contentVariants = {
-    initial: { opacity: 0, y: 30 },
-    animate: { 
-      opacity: 1, 
+  const contentVariants: Variants = {
+    initial: { opacity: 0, y: 40, rotateX: 20 },
+    animate: {
+      opacity: 1,
       y: 0,
-      transition: { duration: 0.6, delay: 0.3 },
+      rotateX: 0,
+      transition: {
+        type: 'spring' as const, // ✅ FIX
+        stiffness: 100,
+        damping: 20,
+        delay: 0.4,
+      },
     },
-    exit: { 
-      opacity: 0, 
-      y: -30,
-      transition: { duration: 0.4 },
+    exit: {
+      opacity: 0,
+      y: -20,
+      transition: { duration: 0.3 },
     },
   }
 
   if (!slides.length) return null
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-black">
-      {/* Background Slides with direction logic */}
+    <section
+      onMouseMove={handleMouseMove}
+      className="relative h-screen w-full overflow-hidden bg-[#050505] perspective-1000"
+    >
       <AnimatePresence initial={false} custom={direction} mode="wait">
         <motion.div
           key={activeSlide}
@@ -78,34 +96,40 @@ export function Hero({ data }: HeroProps) {
           exit="exit"
           className="absolute inset-0"
         >
-          {/* Background Image using Next.js Image Component for DB URLS */}
-          {slides[activeSlide]?.image?.url && (
-            <div className="absolute inset-0">
+          <motion.div
+            className="absolute inset-0"
+            animate={{
+              x: -mousePosition.x,
+              y: -mousePosition.y,
+              scale: 1.05,
+            }}
+            transition={{ type: 'tween', ease: 'linear', duration: 0.2 }}
+          >
+            {slides[activeSlide]?.image?.url && (
               <Image
                 src={slides[activeSlide].image.url}
-                alt={slides[activeSlide].title || "Hero Slide"}
+                alt={slides[activeSlide].title || 'Hero Slide'}
                 fill
                 className="object-cover"
                 priority
               />
-              {/* Gradient Overlays from first UI */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/80" />
-            </div>
-          )}
+            )}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/90" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/80" />
+          </motion.div>
 
-          {/* Animated overlay dot pattern from first UI */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0" style={{
-              backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
-              backgroundSize: '40px 40px',
-            }} />
-          </div>
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
+              backgroundSize: '60px 60px',
+            }}
+          />
         </motion.div>
       </AnimatePresence>
 
-      {/* Centered Content with AnimatePresence */}
       <div className="relative h-full flex items-center justify-center z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="max-w-7xl mx-auto px-6 w-full">
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={activeSlide}
@@ -113,69 +137,52 @@ export function Hero({ data }: HeroProps) {
               initial="initial"
               animate="animate"
               exit="exit"
-              className="text-center text-white"
+              className="text-center"
             >
-              {/* Heading with Highlighted Box */}
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-4 leading-tight">
-                <span className="block">{slides[activeSlide].title}</span>
-                <span className="block mt-2">
-                  <span className="bg-primary/20 px-4 py-2 inline-block rounded-lg text-primary border border-primary/30">
-                    {slides[activeSlide].highlight}
-                  </span>
-                  <span className="ml-4">{slides[activeSlide].subtitle}</span>
+              <motion.span
+                initial={{ opacity: 0, letterSpacing: '0.5em' }}
+                animate={{ opacity: 1, letterSpacing: '0.2em' }}
+                className="text-primary font-bold text-xs md:text-sm uppercase mb-4 block"
+              >
+                {slides[activeSlide].highlight}
+              </motion.span>
+
+              <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-6">
+                {slides[activeSlide].title}
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+                  {slides[activeSlide].subtitle}
                 </span>
               </h1>
 
-              {/* Description */}
-              <p className="max-w-2xl mx-auto text-lg md:text-xl text-gray-300 leading-relaxed mb-8">
+              <p className="max-w-xl mx-auto text-base md:text-lg text-gray-400 font-medium leading-relaxed mb-10">
                 {slides[activeSlide].description}
               </p>
+
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="inline-block">
+                <div className="relative group cursor-pointer">
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
+                  <button className="relative px-8 py-4 bg-black rounded-full text-white font-bold text-sm border border-white/10 flex items-center divide-x divide-gray-600">
+                    <span className="pr-6">Start Journey</span>
+                    <span className="pl-6 text-secondary group-hover:text-white transition-colors">2026</span>
+                  </button>
+                </div>
+              </motion.div>
             </motion.div>
           </AnimatePresence>
         </div>
       </div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
-        <ChevronDown className="w-8 h-8 text-white/60" />
-      </motion.div>
-
-      {/* Slide Navigation Indicators */}
-      <div className="absolute bottom-8 left-8 z-20 flex gap-3">
+      {/* Indicators */}
+      <div className="absolute bottom-12 right-12 z-20 flex flex-col gap-4">
         {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleSlideChange(index)}
-            className="group relative"
-            aria-label={`Go to slide ${index + 1}`}
-          >
-            <div
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                index === activeSlide
-                  ? 'bg-primary w-8'
-                  : 'bg-white/50 group-hover:bg-white/80'
-              }`}
-            />
+          <button key={index} onClick={() => handleSlideChange(index)} className="flex items-center gap-4 group">
+            <span className={`text-[10px] font-bold ${index === activeSlide ? 'text-primary' : 'text-white/20'}`}>
+              0{index + 1}
+            </span>
+            <div className={`h-[2px] ${index === activeSlide ? 'w-12 bg-primary' : 'w-4 bg-white/20'}`} />
           </button>
         ))}
       </div>
-
-      {/* Visual Progress Bar */}
-      <motion.div
-        className="absolute bottom-0 left-0 right-0 h-1 bg-primary/30 z-20"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{
-          duration: 6,
-          ease: "linear",
-          repeat: Infinity,
-        }}
-        style={{ originX: 0 }}
-      />
     </section>
   )
 }

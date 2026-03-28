@@ -1,5 +1,7 @@
+'use client'
+
 import Link from 'next/link'
-import { Facebook, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react'
+import { Facebook, Instagram, Linkedin, Twitter, Youtube, Mail, Phone, MapPin } from 'lucide-react'
 
 const footerLinks = {
   academics: [
@@ -7,80 +9,83 @@ const footerLinks = {
     { name: 'Graduate Programs', href: '/programs' },
     { name: 'Research', href: '/research' },
     { name: 'Academic Calendar', href: '/news' },
-    { name: 'Libraries', href: '/campus' },
   ],
   admissions: [
     { name: 'Apply Now', href: '/admissions' },
     { name: 'Visit Campus', href: '/campus' },
     { name: 'Tuition & Aid', href: '/admissions' },
     { name: 'International Students', href: '/admissions' },
-    { name: 'Transfer Students', href: '/admissions' },
   ],
   campus: [
     { name: 'Student Life', href: '/campus' },
-    { name: 'Housing & Dining', href: '/campus' },
     { name: 'Photo Gallery', href: '/gallery' },
     { name: 'Virtual Tour', href: '/campus' },
     { name: 'Campus Map', href: '/contact' },
   ],
-  about: [
-    { name: 'Our History', href: '/' },
-    { name: 'Research & Faculty', href: '/research' },
-    { name: 'News & Events', href: '/news' },
-    { name: 'Contact Us', href: '/contact' },
-    { name: 'Careers', href: '/contact' },
-  ],
+  legal: [
+    { name: 'Privacy Policy', href: '#' },
+    { name: 'Terms of Use', href: '#' },
+    { name: 'Accessibility', href: '#' },
+    { name: 'Non-Discrimination', href: '#' },
+  ]
 }
 
 const socialLinks = [
-  { name: 'Facebook', href: '#', icon: Facebook },
-  { name: 'Twitter', href: '#', icon: Twitter },
   { name: 'Instagram', href: '#', icon: Instagram },
   { name: 'LinkedIn', href: '#', icon: Linkedin },
   { name: 'YouTube', href: '#', icon: Youtube },
+  { name: 'Twitter', href: '#', icon: Twitter },
 ]
 
 export function Footer() {
   return (
-    <footer id="contact" className="bg-primary text-primary-foreground">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-20">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Logo & Contact */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-8 lg:mb-0">
-            <Link href="/" className="inline-block mb-6">
-              <span className="text-2xl font-bold tracking-tight">Avirat </span>
+    <footer id="contact" className="bg-gray-900 text-white border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-10">
+        
+        {/* Main Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
+          
+          {/* Brand & Identity Column */}
+          <div className="col-span-2 lg:col-span-2 pr-0 lg:pr-20">
+            <Link href="/" className="inline-block mb-6 group">
+              <span className="text-3xl font-black tracking-tighter transition-colors group-hover:text-secondary">
+                AVIRAT<span className="text-secondary text-4xl">.</span>
+              </span>
             </Link>
-            <address className="not-italic text-primary-foreground/70 text-sm leading-relaxed">
-              123 University Avenue
-              <br />
-              Cambridge, MA 02142
-              <br />
-              United States
-            </address>
-            <div className="mt-4 text-sm">
-              <p className="text-primary-foreground/70">General Inquiries</p>
-              <a href="tel:+16175551234" className="hover:text-accent transition-colors">
-                +1 (617) 555-1234
-              </a>
-            </div>
-            <div className="mt-2 text-sm">
-              <a href="mailto:info@Avirat .edu" className="hover:text-accent transition-colors">
-                info@Avirat .edu
-              </a>
+            <p className="text-gray-400 text-sm leading-relaxed mb-8 max-w-sm">
+              Empowering the next generation of engineers and leaders through industry-aligned curriculum and hands-on research.
+            </p>
+            
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 group">
+                <MapPin className="w-5 h-5 text-secondary mt-0.5" />
+                <address className="not-italic text-sm text-gray-400 leading-relaxed">
+                  Sector 15, Near GIDC,<br />
+                  Gandhinagar, Gujarat 382016
+                </address>
+              </div>
+              <div className="flex items-center gap-3">
+                <Phone className="w-5 h-5 text-secondary" />
+                <a href="tel:+919876543210" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  +91 98765 43210
+                </a>
+              </div>
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-secondary" />
+                <a href="mailto:info@avirat.edu" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  info@avirat.edu
+                </a>
+              </div>
             </div>
           </div>
 
-          {/* Academics */}
+          {/* Links Columns */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Academics</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white mb-6">Academics</h3>
+            <ul className="space-y-4">
               {footerLinks.academics.map((link) => (
                 <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-gray-400 hover:text-white transition-all hover:pl-1">
                     {link.name}
                   </Link>
                 </li>
@@ -88,16 +93,12 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Admissions */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Admissions</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white mb-6">Admissions</h3>
+            <ul className="space-y-4">
               {footerLinks.admissions.map((link) => (
                 <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-gray-400 hover:text-white transition-all hover:pl-1">
                     {link.name}
                   </Link>
                 </li>
@@ -105,33 +106,12 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Campus */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">Campus</h3>
-            <ul className="space-y-3">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-white mb-6">Campus</h3>
+            <ul className="space-y-4">
               {footerLinks.campus.map((link) => (
                 <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* About */}
-          <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider mb-4">About</h3>
-            <ul className="space-y-3">
-              {footerLinks.about.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-gray-400 hover:text-white transition-all hover:pl-1">
                     {link.name}
                   </Link>
                 </li>
@@ -140,43 +120,35 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-primary-foreground/20 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            {/* Social Links */}
-            <div className="flex items-center gap-4">
-              {socialLinks.map((social) => (
-                <Link
-                  key={social.name}
-                  href={social.href}
-                  className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-primary-foreground/20 transition-colors"
-                  aria-label={social.name}
-                >
-                  <social.icon className="h-5 w-5" />
-                </Link>
-              ))}
-            </div>
+        {/* Bottom Bar */}
+        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+          
+          {/* Socials */}
+          <div className="flex items-center gap-2">
+            {socialLinks.map((social) => (
+              <Link
+                key={social.name}
+                href={social.href}
+                className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-all duration-300"
+                aria-label={social.name}
+              >
+                <social.icon className="h-5 w-5" />
+              </Link>
+            ))}
+          </div>
 
-            {/* Legal Links */}
-            <div className="flex flex-wrap justify-center gap-6 text-sm text-primary-foreground/70">
-              <Link href="#" className="hover:text-primary-foreground transition-colors">
-                Privacy Policy
+          {/* Legal Links (Simplified) */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-2">
+            {footerLinks.legal.map((link) => (
+              <Link key={link.name} href={link.href} className="text-[11px] font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-colors">
+                {link.name}
               </Link>
-              <Link href="#" className="hover:text-primary-foreground transition-colors">
-                Terms of Use
-              </Link>
-              <Link href="#" className="hover:text-primary-foreground transition-colors">
-                Accessibility
-              </Link>
-              <Link href="#" className="hover:text-primary-foreground transition-colors">
-                Non-Discrimination
-              </Link>
-            </div>
+            ))}
           </div>
 
           {/* Copyright */}
-          <p className="text-center text-sm text-primary-foreground/50 mt-8">
-            © {new Date().getFullYear()} Avirat University. All rights reserved.
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-gray-600">
+            © {new Date().getFullYear()} Avirat University
           </p>
         </div>
       </div>
