@@ -121,7 +121,7 @@ export default function AdmissionInquiry({ isOpen, onClose }: PortalsMenuProps) 
                 className="space-y-8"
               >
                 <p className="text-gray-500 font-medium leading-relaxed">
-                  Join a community of innovators. Leave your details below and our counselor Nihal will guide you personally.
+                  Join a community of innovators. Leave your details below and our counselor will guide you personally.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -243,9 +243,9 @@ export default function AdmissionInquiry({ isOpen, onClose }: PortalsMenuProps) 
                     <CheckCircle2 className="w-12 h-12 text-white" />
                   </div>
                 </div>
-                <h2 className="text-4xl font-black text-gray-900 tracking-tighter mb-4">You're All Set!</h2>
+                <h2 className="text-4xl font-black text-gray-900 tracking-tighter mb-4">You&apos;re All Set!</h2>
                 <p className="text-gray-500 font-medium text-lg max-w-[320px] leading-relaxed">
-                  Excellent choice. We've received your request and will reach out to you within 24 hours.
+                  Excellent choice. We&rsquo;ve received your request and will reach out to you within 24 hours.
                 </p>
                 
                 {/* Visual Progress Bar */}

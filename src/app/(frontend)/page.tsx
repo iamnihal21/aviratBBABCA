@@ -1,89 +1,24 @@
-'use client'
+import { getPayloadHMR } from '@payloadcms/next/utilities'
+import configPromise from '@/payload.config'
 
-import { useState, useEffect } from 'react'
-import { Hero } from '@/app/(frontend)/components/hero'
-import { Testimonials } from '@/app/(frontend)/components/testimonials'
-import { ApplyNow } from './components/ApplyNow'
-import { MessageSection } from './components/message'
-import { HomeGallery } from './components/HomeGallery'
-import { MapSection } from './components/mapSection'
-import { Stats } from './components/stats'
-import { CourseStructure } from './components/subjects'
-import { CourseDialog } from './components/courseSelection'
-import { CourseType } from '@/types/course'
-import { WhyChooseUs } from './components/WhyChoseUs'
+import HomeClient from '../(frontend)/components/HomeClient' // 👈 create this
 
-export default function Home() {
-  const [selectedCourse, setSelectedCourse] = useState<CourseType | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+export default async function Page() {
+  const payload = await getPayloadHMR({ config: configPromise })
 
-  // New state for Payload data
-  const [homeData, setHomeData] = useState<any>(null)
-  const [galleryImages, setGalleryImages] = useState<any[]>([])
+  const homeData = await payload.findGlobal({
+    slug: 'home-settings',
+  })
 
-  useEffect(() => {
-    // 1. Existing Course Logic
-    const savedCourse = localStorage.getItem('selectedCourse') as CourseType | null
-    if (savedCourse) {
-      setSelectedCourse(savedCourse)
-    }
-
-    // 2. New Data Fetching Logic from Payload
-    const fetchPayloadData = async () => {
-      try {
-        // Fetching Global Home Settings
-        const homeRes = await fetch('/api/globals/home-settings')
-        const home = await homeRes.json()
-        setHomeData(home)
-
-        // Fetching Gallery Images (limit 4 for home grid)
-        const galleryRes = await fetch('/api/gallery?limit=4')
-        const gallery = await galleryRes.json()
-        setGalleryImages(gallery.docs)
-      } catch (error) {
-        console.error('Error loading CMS data:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchPayloadData()
-  }, [])
-
-  const handleCourseSelect = (course: CourseType) => {
-    setSelectedCourse(course)
-    localStorage.setItem('selectedCourse', course)
-  }
-
-  if (isLoading) return null
+  const gallery = await payload.find({
+    collection: 'gallery',
+    limit: 4,
+  })
 
   return (
-    <main>
-      {/* Pass fetched slides to Hero */}
-      <Hero data={homeData?.slides} />
-
-      <CourseDialog onSelect={handleCourseSelect} />
-
-      {selectedCourse && (
-        <>
-          <Stats data={homeData?.stats} />
-          <HomeGallery images={galleryImages} />
-
-          {/* FIX: Pass the courses data from homeData */}
-          <CourseStructure courseType={selectedCourse} data={homeData?.courses} />
-
-          <Testimonials data={homeData?.testimonials} />
-        </>
-      )}
-
-      <WhyChooseUs data={homeData?.whyChooseUs} />
-      {/* Pass mapUrl and Sanskrit quote to lower sections */}
-      <MapSection />
-      <ApplyNow />
-      <MessageSection
-        sanskritQuote={homeData?.sanskritQuote}
-        quoteTranslation={homeData?.quoteTranslation}
-      />
-    </main>
+    <HomeClient
+      homeData={homeData}
+      galleryImages={gallery.docs}
+    />
   )
 }

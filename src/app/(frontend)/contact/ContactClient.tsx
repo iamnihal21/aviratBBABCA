@@ -101,7 +101,7 @@ export default function ContactClient({ data }: { data: any }) {
               variants={fadeInUp}
               className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.85]"
             >
-              We're Here to{' '} <br />
+              We&apos;re Here to{' '} <br />
               <span className="text-primary italic">help</span>
             </motion.h1>
             
